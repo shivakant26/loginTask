@@ -3,17 +3,18 @@
 }
 .form{
   margin: 150px auto;
+  width: 350px;
 }
 .form-field{
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   position: relative;
 }
-/* input[type="text"]{
-  padding: 8px 20px;
-  outline: none;
-  border-radius: 5px;
-  border: 1px solid gray;
-} */
+.css-k4qjio-MuiFormHelperText-root.Mui-error {
+  color: #d32f2f;
+  position: absolute;
+  top: 34px;
+  left: -13px;
+}
 button{
   background-color: brown;
   padding: 8px 20px;

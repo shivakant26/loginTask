@@ -3,63 +3,76 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { loginData } from "../Redux/Action/action";
+import * as Yup from "yup";
+import { Form, Formik } from "formik";
+
+export const SigninSchema = Yup.object().shape({
+  userName: Yup.string().min(2, "Too Short!").required("Required"),
+  password: Yup.string().min(2, "Too Short!").required("Required"),
+});
 
 class Login extends React.Component {
   constructor() {
     super();
-    this.state = {
-      username: null,
-      password: null,
-    };
   }
-  signIn() {
-    let login_object = this.state;
-    this.props.dispatch(loginData(login_object));
-  }
-  componentDidMount() {
-    let token = localStorage.getItem("token");
-    console.log(44444,token)
-  }
+
   render() {
     return (
       <>
         <div className="form">
-          <h4>Login here...</h4>
-          <div className="form-field">
-            <TextField
-              id="outlined-basic"
-              label="username"
-              variant="outlined"
-              size="small"
-              onChange={(e) => {
-                this.setState({ username: e.target.value });
-              }}
-            />
-          </div>
-          <div className="form-field">
-            <TextField
-              id="outlined-basic"
-              label="password"
-              variant="outlined"
-              size="small"
-              onChange={(e) => {
-                this.setState({ password: e.target.value });
-              }}
-            />
-          </div>
-          <div className="form-field">
-            <Button
-              variant="contained"
-              onClick={() => {
-                this.signIn();
-              }}
-            >
-              Login
-            </Button>
-          </div>
-          <p>
-            If you have no Account Please <a href="/register">Register</a>
-          </p>
+          <Formik
+            initialValues={{
+              userName: "",
+              password: "",
+            }}
+            validationSchema={SigninSchema}
+            onSubmit={(values ,{resetForm}) => {
+              this.props.dispatch(loginData(values))
+              resetForm({ values: "" });
+            }}
+          >
+            {({ errors, touched, values, handleChange }) => (
+              <Form>
+                <div className="form-field">
+                  <TextField
+                    error={errors.userName}
+                    id="userName"
+                    name="userName"
+                    label="User Name"
+                    size="small"
+                    variant="outlined"
+                    fullWidth
+                    onBlur={handleChange}
+                    onChange={handleChange}
+                    helperText={errors.userName && errors.userName}
+                  />
+                </div>
+
+                <div className="form-field">
+                <TextField
+                    error={errors.password}
+                    id="password"
+                    name="password"
+                    label="Password"
+                    size="small"
+                    variant="outlined"
+                    fullWidth
+                    onBlur={handleChange}
+                    onChange={handleChange}
+                    helperText={errors.password && errors.password}
+                  />
+                </div>
+                <div className="form-field">
+                  <Button variant="contained" type="submit">
+                    Login
+                  </Button>
+                </div>
+                <p>
+                  If you have allReady Account. Please <a href="/register">Register</a>
+                </p>
+              </Form>
+            )}
+          </Formik>
         </div>
       </>
     );

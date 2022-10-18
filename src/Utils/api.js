@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-    baseURL: 'https://5a9e-103-9-14-187.in.ngrok.io/api/auth',
+    baseURL: 'https://115e-103-9-14-187.in.ngrok.io/api/auth',
     headers: {"Content-Type": "application/json"}
   });
   instance.interceptors.request.use(function (config) {

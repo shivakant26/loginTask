@@ -1,5 +1,5 @@
 import { Button, TextField } from "@mui/material";
-import { Field, Form, Formik } from "formik";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -9,133 +9,81 @@ import { SignupSchema } from "../schemaValidation";
 class Register extends React.Component {
   constructor() {
     super();
-    this.state = {
-      username: null,
-      password: null,
-      email: null,
-    };
   }
-  Register() {
-    let register_object = this.state;
-    this.props.dispatch(registerData(register_object));
-    this.setState({
-      username: "",
-      password: "",
-      email: "",
-    });
-  }
+
   render() {
     return (
       <>
         <div className="form">
-          <h4>SignUp Form</h4>
-          <div className="form-field">
-            <TextField
-              id="outlined-basic"
-              label="username"
-              variant="outlined"
-              size="small"
-              onChange={(e) => {
-                this.setState({ username: e.target.value });
-              }}
-            />
-          </div>
-
-          <div className="form-field">
-            <TextField
-              id="outlined-basic"
-              label="email"
-              variant="outlined"
-              size="small"
-              onChange={(e) => {
-                this.setState({ email: e.target.value });
-              }}
-            />
-          </div>
-
-          <div className="form-field">
-            <TextField
-              id="outlined-basic"
-              label="password"
-              variant="outlined"
-              size="small"
-              onChange={(e) => {
-                this.setState({ password: e.target.value });
-              }}
-            />
-          </div>
-
-          <div className="form-field">
-            <Button
-              variant="contained"
-              onClick={() => {
-                this.Register();
-              }}
-            >
-              Register
-            </Button>
-          </div>
-          <p>
-            If you have allReady Account. Please <a href="/">Login</a>
-          </p>
-          {/* <Formik
+          <Formik
             initialValues={{
               userName: "",
               email: "",
               password: "",
             }}
             validationSchema={SignupSchema}
-            onSubmit={(values) => {
-              console.log(values);
+            onSubmit={(values , {resetForm}) => {
+              this.props.dispatch(registerData(values))
+              resetForm({ values: "" });
             }}
           >
-            {({ errors, touched }) => (
+            {({ errors, touched, values, handleChange }) => (
               <Form>
                 <div className="form-field">
                   <TextField
-                    id="outlined-basic"
-                    label="username"
+                    error={errors.userName}
+                    id="userName"
                     name="userName"
-                    variant="outlined"
+                    label="User Name"
                     size="small"
+                    variant="outlined"
+                    fullWidth
+                    onBlur={handleChange}
+                    onChange={handleChange}
+                    helperText={errors.userName && errors.userName}
                   />
-                  {errors.userName && touched.userName ? (
-                    <div className="error">{errors.userName}</div>
-                  ) : null}
                 </div>
+
                 <div className="form-field">
                   <TextField
-                    id="outlined-basic"
-                    label="email"
-                    variant="outlined"
-                    size="small"
+                    error={errors.email}
+                    id="email"
                     name="email"
-                  />
-                  {errors.email && touched.email ? (
-                    <div className="error">{errors.email}</div>
-                  ) : null}
-                </div>
-                <div className="form-field">
-                  <TextField
-                    id="outlined-basic"
-                    label="password"
-                    variant="outlined"
+                    label="Email"
                     size="small"
+                    variant="outlined"
+                    fullWidth
+                    onBlur={handleChange}
+                    onChange={handleChange}
+                    helperText={errors.email && errors.email}
+                  />
+                </div>
+
+                <div className="form-field">
+                <TextField
+                    error={errors.password}
+                    id="password"
                     name="password"
-            />
-                  {errors.password && touched.password ? (
-                    <div className="error">{errors.password}</div>
-                  ) : null}
+                    label="Password"
+                    size="small"
+                    variant="outlined"
+                    fullWidth
+                    onBlur={handleChange}
+                    onChange={handleChange}
+                    helperText={errors.password && errors.password}
+                  />
                 </div>
                 <div className="form-field">
-                  <Button variant="contained" type="submit">Register</Button>
+                  <Button variant="contained" type="submit">
+                    Register
+                  </Button>
                 </div>
                 <p>
-            If you have allReady Account. Please <a href="/">Login</a>
-          </p>
+                  If you have allReady Account. Please <a href="/">Login</a>
+                </p>
               </Form>
             )}
-          </Formik> */}
+          </Formik>
         </div>
       </>
     );
